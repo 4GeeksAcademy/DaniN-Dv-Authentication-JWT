@@ -12,7 +12,6 @@ class User(db.Model):
     password: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
     salt: Mapped[str] = mapped_column(String(180), nullable=False)
-    avatar: Mapped[str] = mapped_column(String(180), nullable=False, default="https://i.pravatar.cc/300")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(

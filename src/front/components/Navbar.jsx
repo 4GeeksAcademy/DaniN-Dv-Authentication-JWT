@@ -3,7 +3,13 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Navbar = () => {
 
-	const { store } = useGlobalReducer()
+	const { store, dispatch } = useGlobalReducer()
+
+	const logout = () => {
+		dispatch({ type: "SET_TOKEN", payload: null })
+		localStorage.removeItem("token")
+		localStorage.removeItem("user")
+	}
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -18,7 +24,10 @@ export const Navbar = () => {
 				<div className="collapse navbar-collapse" id="navbarNavDropdown">
 					<ul className="navbar-nav ms-auto">
 						<li className="nav-item">
-							<NavLink className={({isActive}) => `nav-link active ${isActive ? "border-bottom" : ""}`} to="/">Home</NavLink>
+							<NavLink className={({ isActive }) => `nav-link active ${isActive ? "border-bottom" : ""}`} to="/">Home</NavLink>
+						</li>
+						<li className="nav-item">
+							<NavLink className={({ isActive }) => `nav-link active ${isActive ? "border-bottom" : ""}`} to="/tasks">Tasks</NavLink>
 						</li>
 						{
 							store.token ? (
@@ -27,15 +36,16 @@ export const Navbar = () => {
 										User
 									</a>
 									<ul className="dropdown-menu dropdown-menu-end">
-										<li><Link className="dropdown-item" href="#">Profile</Link></li>
-										<li><a className="dropdown-item" href="#">Close session</a></li>
+										<li><Link className="dropdown-item" to="/profile">Profile</Link></li>
+										<li><a className="dropdown-item text-danger" href="#" onClick={() => logout()}>Close session</a></li>
 									</ul>
 								</li>
 
 							) : (
 								<div className="d-flex">
+
 									<li className="nav-item">
-										<NavLink className={({isActive}) => `nav-link active ${isActive ? "border-bottom" : ""}`} to="/login">Login</NavLink>
+										<NavLink className={({ isActive }) => `nav-link active ${isActive ? "border-bottom" : ""}`} to="/login">Login</NavLink>
 									</li>
 								</div>
 

@@ -23,7 +23,7 @@ export const Login = () => {
         })
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (event) => {
 
         event.preventDefault()
 
@@ -40,10 +40,23 @@ export const Login = () => {
 
             if(response.ok){
                 dispatch({type:"SET_TOKEN", payload: data.token})
-                localStorage.setItem("token", data.token)
 
-                setUser(initialUser)
+                const responseUser = await fetch(`${url}/me`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${data.token} `
+                    }
+                })
+
+                const dataUser = await responseUser.json()
+                dispatch({type: "SET_USER", payload: dataUser.user})
+
+                localStorage.setItem("token", data.token)
+                localStorage.setItem("user", JSON.stringify(dataUser.user))
+
                 navigate("/")
+
             }
 
 
@@ -71,7 +84,6 @@ export const Login = () => {
                                 placeholder="example@email.com"
                                 name="email"
                                 onChange={handleChange}
-                                value={user.email}
                             />
                         </div>
                         <div className="form-group mb-3">
@@ -83,7 +95,6 @@ export const Login = () => {
                                 placeholder="********"
                                 name="password"
                                 onChange={handleChange}
-                                value={user.password}
                             />
                         </div>
                         <button className="btn btn-outline-primary col-12">Iniciar</button>

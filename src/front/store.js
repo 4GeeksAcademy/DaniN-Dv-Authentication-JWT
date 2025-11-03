@@ -14,7 +14,7 @@ export const initialStore=()=>{
       },
     ],
     token: localStorage.getItem("token") ?? null,
-    user: null
+    user: JSON.parse(localStorage.getItem("user") || null)
   }
 }
 
@@ -39,6 +39,12 @@ export default function storeReducer(store, action = {}) {
         return {
           ...store,
           token: action.payload
+        }
+
+      case 'SET_USER':
+        return {
+          ...store,
+          user: action.payload
         }
 
     default:
